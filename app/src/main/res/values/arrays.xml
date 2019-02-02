@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="newline_names">
+        <item>LF</item>
+        <item>CR+LF</item>
+    </string-array>
+    <string-array name="newline_values">
+        <item>\u000a</item>
+        <item>\u000d\u000a</item>
+    </string-array>
+</resources>
