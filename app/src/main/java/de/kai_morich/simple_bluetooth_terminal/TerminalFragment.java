@@ -26,8 +26,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.Date;
-
 public class TerminalFragment extends Fragment implements ServiceConnection, SerialListener {
 
     private enum Connected { False, Pending, True }
@@ -41,9 +39,6 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
     private SerialService service;
     private boolean initialStart = true;
     private Connected connected = Connected.False;
-
-    public TerminalFragment() {
-    }
 
     /*
      * Lifecycle
