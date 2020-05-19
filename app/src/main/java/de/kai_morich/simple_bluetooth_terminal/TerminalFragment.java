@@ -35,7 +35,6 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
 
     private TextView receiveText;
 
-    private SerialSocket socket;
     private SerialService service;
     private boolean initialStart = true;
     private Connected connected = Connected.False;
@@ -100,6 +99,7 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
     @Override
     public void onServiceConnected(ComponentName name, IBinder binder) {
         service = ((SerialService.SerialBinder) binder).getService();
+        service.attach(this);
         if(initialStart && isResumed()) {
             initialStart = false;
             getActivity().runOnUiThread(this::connect);
@@ -161,12 +161,10 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
         try {
             BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
             BluetoothDevice device = bluetoothAdapter.getRemoteDevice(deviceAddress);
-            String deviceName = device.getName() != null ? device.getName() : device.getAddress();
             status("connecting...");
             connected = Connected.Pending;
-            socket = new SerialSocket();
-            service.connect(this, "Connected to " + deviceName);
-            socket.connect(getContext(), service, device);
+            SerialSocket socket = new SerialSocket(getActivity().getApplicationContext(), device);
+            service.connect(socket);
         } catch (Exception e) {
             onSerialConnectError(e);
         }
@@ -175,8 +173,6 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
     private void disconnect() {
         connected = Connected.False;
         service.disconnect();
-        socket.disconnect();
-        socket = null;
     }
 
     private void send(String str) {
@@ -189,7 +185,7 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
             spn.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.colorSendText)), 0, spn.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             receiveText.append(spn);
             byte[] data = (str + newline).getBytes();
-            socket.write(data);
+            service.write(data);
         } catch (Exception e) {
             onSerialIoError(e);
         }

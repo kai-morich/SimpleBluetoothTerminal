@@ -1,5 +1,6 @@
 package de.kai_morich.simple_bluetooth_terminal;
 
+import android.app.Activity;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.BroadcastReceiver;
@@ -8,6 +9,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 
 import java.io.IOException;
+import java.security.InvalidParameterException;
 import java.util.Arrays;
 import java.util.UUID;
 import java.util.concurrent.Executors;
@@ -24,7 +26,11 @@ class SerialSocket implements Runnable {
     private BluetoothSocket socket;
     private boolean connected;
 
-    SerialSocket() {
+    SerialSocket(Context context, BluetoothDevice device) {
+        if(context instanceof Activity)
+            throw new InvalidParameterException("expected non UI context");
+        this.context = context;
+        this.device = device;
         disconnectBroadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -35,15 +41,15 @@ class SerialSocket implements Runnable {
         };
     }
 
+    String getName() {
+        return device.getName() != null ? device.getName() : device.getAddress();
+    }
+
     /**
      * connect-success and most connect-errors are returned asynchronously to listener
      */
-    void connect(Context context, SerialListener listener, BluetoothDevice device) throws IOException {
-        if(connected || socket != null)
-            throw new IOException("already connected");
-        this.context = context;
+    void connect(SerialListener listener) throws IOException {
         this.listener = listener;
-        this.device = device;
         context.registerReceiver(disconnectBroadcastReceiver, new IntentFilter(Constants.INTENT_ACTION_DISCONNECT));
         Executors.newSingleThreadExecutor().submit(this);
     }
