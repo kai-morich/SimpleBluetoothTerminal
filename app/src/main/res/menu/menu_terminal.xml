@@ -8,5 +8,11 @@
         app:showAsAction="always" />
     <item
         android:id="@+id/newline"
-        android:title="Newline Mode" />
+        android:title="Newline"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/hex"
+        android:title="HEX Mode"
+        android:checkable="true"
+        app:showAsAction="never" />
 </menu>
