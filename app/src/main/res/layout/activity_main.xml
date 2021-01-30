@@ -9,8 +9,15 @@
 
     <com.jjoe64.graphview.GraphView
         android:layout_width="match_parent"
+        android:layout_marginTop="100dp"
         android:layout_height="200dip"
-        android:id="@+id/graph" />
+        android:id="@+id/ECGgraph" />
+
+    <com.jjoe64.graphview.GraphView
+        android:layout_width="match_parent"
+        android:layout_height="200dip"
+        android:layout_marginTop= "300dp"
+        android:id="@+id/PPGgraph" />
 
 
     <com.google.android.material.appbar.AppBarLayout
