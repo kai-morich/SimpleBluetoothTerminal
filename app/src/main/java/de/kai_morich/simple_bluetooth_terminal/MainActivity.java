@@ -1,6 +1,7 @@
 package de.kai_morich.simple_bluetooth_terminal;
 
 import android.os.Bundle;
+//import package.R;
 import androidx.fragment.app.FragmentManager;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
