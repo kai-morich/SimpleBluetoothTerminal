@@ -46,8 +46,8 @@ public class PlaceholderFragment extends Fragment {
     public View onCreateView(
             @NonNull LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.activity_vital_signs_monitor, container, false);
-        final TextView textView = root.findViewById(R.id.section_label);
+        View root = inflater.inflate(R.layout.activity_main, container, false);
+        final TextView textView = root.findViewById(R.id.main_section_label);
         pageViewModel.getText().observe(this, new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
