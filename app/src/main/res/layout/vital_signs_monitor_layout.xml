@@ -44,7 +44,7 @@
             android:id="@+id/ECGgraph"
             android:layout_width="match_parent"
             android:layout_height="200dip"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="0dp"
             android:background="#474747" />
 
         <com.jjoe64.graphview.GraphView
