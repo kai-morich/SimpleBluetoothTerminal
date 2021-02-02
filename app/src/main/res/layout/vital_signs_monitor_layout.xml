@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#575656"
+    android:background="@color/colorBackground"
     tools:context=".VitalSignsMonitorFragment">
 
 
@@ -27,7 +27,7 @@
         android:layout_width="match_parent"
         android:layout_height="200dip"
         android:layout_marginTop="200dip"
-        android:background="#474747" />
+        android:background="@color/colorBackground" />
 
     <com.jjoe64.graphview.GraphView
         android:id="@+id/PPGgraph"
@@ -35,7 +35,7 @@
         android:layout_height="200dip"
         android:layout_marginTop="400dip"
         android:layout_marginBottom="0dp"
-        android:background="#474747" />
+        android:background="@color/colorBackground" />
 
 
 
@@ -45,41 +45,45 @@
 
         <TableRow
             android:layout_width="match_parent"
-            android:layout_height="100dip" >
+            android:layout_height="100dip">
 
                 <TextView
                     android:text="ECG(BMP)"
                     android:layout_width="0dp"
                     android:layout_weight=".33"
                     android:layout_height="wrap_content"
-                    android:layout_column="1" />
+                    android:layout_column="1"
+                    android:textSize="24dip"/>
 
                 <TextView
-                    android:text="PPG(???)"
+                    android:text="SpO2"
                     android:layout_width="0dp"
                     android:layout_weight=".33"
                     android:layout_height="wrap_content"
-                    android:layout_column="2" />
+                    android:layout_column="2"
+                    android:textSize="24dip"/>
 
                 <TextView
-                    android:text="Temp.(°C)"
+                    android:text="T °C"
                     android:layout_width="0dp"
                     android:layout_weight=".33"
                     android:layout_height="wrap_content"
-                    android:layout_column="3" />
+                    android:layout_column="3"
+                    android:textSize="24dip"/>
 
         </TableRow>
 
         <TableRow
             android:layout_width="match_parent"
-            android:layout_height="100dip" >
+            android:layout_height="100dip">
 
             <TextView
                 android:text="@id"
                 android:layout_width="0dp"
                 android:layout_weight=".33"
                 android:layout_height="wrap_content"
-                android:layout_column="1" />
+                android:layout_column="1"
+                android:textSize="24dip"/>
 
 
             <TextView
@@ -87,14 +91,16 @@
                 android:layout_width="0dp"
                 android:layout_weight=".33"
                 android:layout_height="wrap_content"
-                android:layout_column="2" />
+                android:layout_column="2"
+                android:textSize="24dip"/>
 
             <TextView
                 android:text="@id"
                 android:layout_width="0dp"
                 android:layout_weight=".33"
                 android:layout_height="wrap_content"
-                android:layout_column="3" />
+                android:layout_column="3"
+                android:textSize="24dip"/>
 
         </TableRow>
 
