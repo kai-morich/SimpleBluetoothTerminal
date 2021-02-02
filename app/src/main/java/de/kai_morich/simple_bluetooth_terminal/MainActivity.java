@@ -20,22 +20,19 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.main_tab_layout);
+        TabLayout tabs = (TabLayout) findViewById(R.id.tabs);
         final ViewPager viewPager =(ViewPager)findViewById(R.id.view_pager);
-
-
-
-        //tabLayout.addTab(tabLayout.newTab().setText("Page 1"));
-        //tabLayout.addTab(tabLayout.newTab().setText("Page 2"));
-        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+        tabs.addTab(tabs.newTab().setText("Page 1"));
+        tabs.addTab(tabs.newTab().setText("Page 2"));
+        tabs.setTabGravity(TabLayout.GRAVITY_FILL);
 
         SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
         viewPager.setAdapter(sectionsPagerAdapter);
 
-        tabLayout.setupWithViewPager(viewPager);
+        tabs.setupWithViewPager(viewPager);
 
-        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabs));
+        tabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 viewPager.setCurrentItem(tab.getPosition());
