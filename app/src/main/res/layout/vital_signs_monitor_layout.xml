@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".VitalSignsMonitorFragment">
 
+
     <TextView
         android:id="@+id/section_label"
         android:layout_width="wrap_content"
@@ -59,7 +60,7 @@
             android:id="@+id/PPGgraph" />
         
         
-        <TextView
+<!--        <TextView
             android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -67,7 +68,7 @@
             android:minHeight="?actionBarSize"
             android:padding="@dimen/appbar_padding"
             android:text="@string/app_name"
-            android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title" />
+            android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title" />-->
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/monitor_tab"
