@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#575656"
     tools:context=".VitalSignsMonitorFragment">
 
 
@@ -21,7 +22,6 @@
         tools:layout_constraintTop_creator="1" />
 
 
-
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/pager"
         android:layout_width="match_parent"
@@ -34,13 +34,6 @@
 
     </androidx.viewpager.widget.ViewPager>
 
-    <androidx.viewpager.widget.ViewPager
-        android:id="@+id/monitor_pager"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-
-
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -48,19 +41,21 @@
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <com.jjoe64.graphview.GraphView
+            android:id="@+id/ECGgraph"
             android:layout_width="match_parent"
-            android:layout_marginTop="100dp"
             android:layout_height="200dip"
-            android:id="@+id/ECGgraph" />
+            android:layout_marginTop="50dp"
+            android:background="#474747" />
 
         <com.jjoe64.graphview.GraphView
+            android:id="@+id/PPGgraph"
             android:layout_width="match_parent"
             android:layout_height="200dip"
-            android:layout_marginTop= "300dp"
-            android:id="@+id/PPGgraph" />
-        
-        
-<!--        <TextView
+            android:layout_marginTop="0dip"
+            android:background="#474747" />
+
+
+        <!--        <TextView
             android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -70,13 +65,13 @@
             android:text="@string/app_name"
             android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title" />-->
 
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/monitor_tab"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="?attr/colorPrimary" />
     </com.google.android.material.appbar.AppBarLayout>
 
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/monitor_pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
