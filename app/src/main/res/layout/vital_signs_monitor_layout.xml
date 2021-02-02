@@ -22,30 +22,109 @@
         tools:layout_constraintTop_creator="1" />
 
 
-        <com.jjoe64.graphview.GraphView
-            android:id="@+id/ECGgraph"
+    <com.jjoe64.graphview.GraphView
+        android:id="@+id/ECGgraph"
+        android:layout_width="match_parent"
+        android:layout_height="200dip"
+        android:layout_marginTop="200dip"
+        android:background="#474747" />
+
+    <com.jjoe64.graphview.GraphView
+        android:id="@+id/PPGgraph"
+        android:layout_width="match_parent"
+        android:layout_height="200dip"
+        android:layout_marginTop="400dip"
+        android:layout_marginBottom="0dp"
+        android:background="#474747" />
+
+
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="200dip">
+
+        <TableRow
             android:layout_width="match_parent"
-            android:layout_height="200dip"
-            android:layout_marginTop="0dp"
-            android:background="#474747" />
+            android:layout_height="100dip" >
 
-        <com.jjoe64.graphview.GraphView
-            android:id="@+id/PPGgraph"
+                <TextView
+                    android:text="ECG(BMP)"
+                    android:layout_width="0dp"
+                    android:layout_weight=".33"
+                    android:layout_height="wrap_content"
+                    android:layout_column="1" />
+
+                <TextView
+                    android:text="PPG(???)"
+                    android:layout_width="0dp"
+                    android:layout_weight=".33"
+                    android:layout_height="wrap_content"
+                    android:layout_column="2" />
+
+                <TextView
+                    android:text="Temp.(°C)"
+                    android:layout_width="0dp"
+                    android:layout_weight=".33"
+                    android:layout_height="wrap_content"
+                    android:layout_column="3" />
+
+        </TableRow>
+
+        <TableRow
             android:layout_width="match_parent"
-            android:layout_height="200dip"
-            android:layout_marginTop="200dip"
-            android:background="#474747" />
+            android:layout_height="100dip" >
+
+            <TextView
+                android:text="@id"
+                android:layout_width="0dp"
+                android:layout_weight=".33"
+                android:layout_height="wrap_content"
+                android:layout_column="1" />
 
 
-        <!--        <TextView
-            android:id="@+id/title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:minHeight="?actionBarSize"
-            android:padding="@dimen/appbar_padding"
-            android:text="@string/app_name"
-            android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title" />-->
+            <TextView
+                android:text="@id"
+                android:layout_width="0dp"
+                android:layout_weight=".33"
+                android:layout_height="wrap_content"
+                android:layout_column="2" />
+
+            <TextView
+                android:text="@id"
+                android:layout_width="0dp"
+                android:layout_weight=".33"
+                android:layout_height="wrap_content"
+                android:layout_column="3" />
+
+        </TableRow>
+
+    </TableLayout>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!--        <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:minHeight="?actionBarSize"
+        android:padding="@dimen/appbar_padding"
+        android:text="@string/app_name"
+        android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title" />-->
 
 
 

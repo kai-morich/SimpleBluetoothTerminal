@@ -1,7 +1,7 @@
 <resources>
-    <string name="app_name">Simple Bluetooth Terminal</string>
+    <string name="app_name">Vital Signs Monitor</string>
     <string name="devices">Bluetooth Devices</string>
     <string name="title_activity_vital_signs_monitor">VitalSignsMonitor</string>
-    <string name="tab_text_1">Tab 1</string>
-    <string name="tab_text_2">Tab 2</string>
+    <string name="tab_text_1">Terminal</string>
+    <string name="tab_text_2">Monitor</string>
 </resources>
