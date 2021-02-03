@@ -27,16 +27,16 @@
         android:layout_width="match_parent"
         android:layout_height="200dip"
         android:layout_marginTop="100dip"
-        android:background="@color/colorBackground" />
+        android:background="@drawable/red_bpm_shape" />
 
 
     <com.jjoe64.graphview.GraphView
         android:id="@+id/PPGgraph"
         android:layout_width="match_parent"
         android:layout_height="200dip"
-        android:layout_marginTop="450dip"
+        android:layout_marginTop="425dip"
         android:layout_marginBottom="0dp"
-        android:background="@color/colorBackground"
+        android:background="@drawable/green_oxygen_shape"
         app:layout_anchor="@+id/PPGgraph"
         app:layout_anchorGravity="bottom|center" />
 
@@ -56,7 +56,8 @@
                 android:layout_column="1"
                 android:layout_weight=".33"
                 android:text="ECG(BMP)"
-                android:textSize="24dip" />
+                android:textSize="24dip"
+                android:background="@drawable/red_bpm_shape" />
 
             <TextView
                 android:layout_width="0dp"
@@ -64,7 +65,8 @@
                 android:layout_column="3"
                 android:layout_weight=".33"
                 android:text="T °C"
-                android:textSize="24dip" />
+                android:textSize="24dip"
+                android:background="@drawable/blue_temp_shape" />
 
         </TableRow>
 
@@ -80,7 +82,8 @@
                 android:layout_column="1"
                 android:layout_weight=".33"
                 android:text="@id"
-                android:textSize="24dip" />
+                android:textSize="24dip"
+                android:background="@drawable/red_bpm_shape" />
 
             <TextView
                 android:layout_width="0dp"
@@ -88,7 +91,8 @@
                 android:layout_column="3"
                 android:layout_weight=".33"
                 android:text="@id"
-                android:textSize="24dip" />
+                android:textSize="24dip"
+                android:background="@drawable/blue_temp_shape"/>
 
         </TableRow>
 
@@ -98,7 +102,7 @@
     <TableLayout
         android:layout_width="match_parent"
         android:layout_height="100dip"
-        android:layout_marginTop="350dip"
+        android:layout_marginTop="325dip"
         android:paddingLeft="10dip"
         android:paddingTop="10dip">
 
@@ -111,6 +115,7 @@
                 android:layout_height="wrap_content"
                 android:layout_column="1"
                 android:layout_weight=".33"
+                android:background="@drawable/green_oxygen_shape"
                 android:text="SpO2"
                 android:textSize="24dip" />
 
@@ -121,10 +126,11 @@
             android:layout_height="100dip">
 
             <TextView
-                android:layout_width="0dp"
+                android:layout_width="392dp"
                 android:layout_height="wrap_content"
                 android:layout_column="1"
                 android:layout_weight=".33"
+                android:background="@drawable/green_oxygen_shape"
                 android:text="@id"
                 android:textSize="24dip" />
 
