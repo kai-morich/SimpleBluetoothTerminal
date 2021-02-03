@@ -4,4 +4,10 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
+
+
+        <style name="graphs">
+            <item name="android:layout_width">match_parent</item>
+            <item name="android:layout_height">220dip</item>
+        </style>
 </resources>

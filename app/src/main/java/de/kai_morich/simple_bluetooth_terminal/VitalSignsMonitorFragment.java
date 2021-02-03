@@ -14,14 +14,15 @@ import androidx.viewpager.widget.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import de.kai_morich.simple_bluetooth_terminal.ui.main.SectionsPagerAdapter;
 
 public class VitalSignsMonitorFragment extends Fragment {
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup, Bundle savedInstanceState){
         return inflater.inflate(R.layout.vital_signs_monitor_layout, viewGroup, false);
-
     }
 
     @Override
@@ -32,6 +33,13 @@ public class VitalSignsMonitorFragment extends Fragment {
 
         ECGgraph.addSeries(VitalSignsMonitor.GetECGPlotData());
         PPGgraph.addSeries(VitalSignsMonitor.GetPPGPlotData());
+
+        TextView text_spo2 = (TextView) view.findViewById(R.id.text_SpO2);
+        text_spo2.setText("220");
+        TextView text_temp = (TextView) view.findViewById(R.id.text_temp);
+        text_temp.setText("36.7");
+        TextView text_bpm = (TextView) view.findViewById(R.id.text_bpm);
+        text_bpm.setText("180");
     }
 }
 

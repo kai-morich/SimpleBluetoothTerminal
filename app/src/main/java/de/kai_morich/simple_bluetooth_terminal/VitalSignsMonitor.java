@@ -18,19 +18,24 @@ public class VitalSignsMonitor {
     private Integer[] ECG_new_samples;
     private Integer[] PPG_new_samples;
 
-    private Integer HeartBeat;
-    private Integer Oxygen;
-    private Double Temp;
+    private static Integer HeartBeat;
+    private static Integer SpO2;
+    private static Double Temp;
 
-    public static Integer[] GetECGAllData() {
-
-        return ECG_all_samples;
+    VitalSignsMonitor(){
+        /*cosntructor
+        Temp=;
+        SpO2=;
+        HeartBeat
+        ECG_new_samples
+        PPG_new_samples
+        PPG_all_samples
+        ECG_all_samples*/
     }
 
-    public static Integer[] getPPGAllData() {
-
-        return PPG_all_samples;
-    }
+    public static Integer GetSpO2(){return SpO2;}
+    public static Integer[] GetECGAllData() {return ECG_all_samples;}
+    public static Integer[] getPPGAllData() {return PPG_all_samples;}
 
     public static LineGraphSeries<DataPoint> GetECGPlotData() {
         LineGraphSeries<DataPoint> ECG_new_samples = new LineGraphSeries<>(new DataPoint[]{

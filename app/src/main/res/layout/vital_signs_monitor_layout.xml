@@ -24,75 +24,93 @@
 
     <com.jjoe64.graphview.GraphView
         android:id="@+id/ECGgraph"
-        android:layout_width="match_parent"
-        android:layout_height="200dip"
-        android:layout_marginTop="100dip"
+        style="@style/graphs"
+        android:layout_marginTop="96dip"
         android:background="@drawable/red_bpm_shape" />
 
 
     <com.jjoe64.graphview.GraphView
         android:id="@+id/PPGgraph"
-        android:layout_width="match_parent"
-        android:layout_height="200dip"
-        android:layout_marginTop="425dip"
+        style="@style/graphs"
+        android:layout_marginTop="421dip"
         android:layout_marginBottom="0dp"
         android:background="@drawable/green_oxygen_shape"
         app:layout_anchor="@+id/PPGgraph"
         app:layout_anchorGravity="bottom|center" />
 
+
     <TableLayout
         android:layout_width="match_parent"
-        android:layout_height="100dip">
+        android:layout_height="wrap_content">
 
         <TableRow
             android:layout_width="match_parent"
-            android:layout_height="100dip"
-            android:paddingStart="10dip"
-            android:paddingTop="10dip">
+            android:layout_height="100dip">
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_column="1"
-                android:layout_weight=".33"
+                android:layout_weight=".47"
+                android:background="@drawable/red_bpm_shape"
+                android:paddingLeft="5dip"
                 android:text="ECG(BMP)"
-                android:textSize="24dip"
-                android:background="@drawable/red_bpm_shape" />
+                android:textColor="@color/colorText"
+                android:textSize="24dip" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_column="2"
+                android:layout_weight=".01"
+                android:textSize="24dip" />
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_column="3"
-                android:layout_weight=".33"
+                android:layout_weight=".47"
+                android:background="@drawable/blue_temp_shape"
                 android:text="T °C"
-                android:textSize="24dip"
-                android:background="@drawable/blue_temp_shape" />
+                android:textColor="@color/colorText"
+                android:textSize="24dip" />
 
         </TableRow>
 
         <TableRow
             android:layout_width="match_parent"
-            android:layout_height="100dip"
-            android:paddingLeft="10dip"
-            android:paddingTop="10dip">
+            android:layout_height="150dip">
 
             <TextView
+                android:id="@+id/text_bpm"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_column="1"
-                android:layout_weight=".33"
-                android:text="@id"
-                android:textSize="24dip"
-                android:background="@drawable/red_bpm_shape" />
+                android:layout_gravity="center_horizontal"
+                android:layout_weight=".49"
+                android:background="@drawable/red_bpm_shape"
+                android:gravity="center"
+                android:textColor="@color/colorText"
+                android:textSize="48dip" />
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_column="2"
+                android:layout_weight=".01"
+                android:textSize="24dip" />
+
+            <TextView
+                android:id="@+id/text_temp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:layout_column="3"
-                android:layout_weight=".33"
-                android:text="@id"
-                android:textSize="24dip"
-                android:background="@drawable/blue_temp_shape"/>
+                android:layout_gravity="center_horizontal"
+                android:layout_weight=".49"
+                android:background="@drawable/blue_temp_shape"
+                android:gravity="center"
+                android:textColor="@color/colorText"
+                android:textSize="48dip" />
 
         </TableRow>
 
@@ -102,9 +120,7 @@
     <TableLayout
         android:layout_width="match_parent"
         android:layout_height="100dip"
-        android:layout_marginTop="325dip"
-        android:paddingLeft="10dip"
-        android:paddingTop="10dip">
+        android:layout_marginTop="325dip">
 
         <TableRow
             android:layout_width="match_parent"
@@ -114,10 +130,19 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_column="1"
-                android:layout_weight=".33"
+                android:layout_weight=".49"
                 android:background="@drawable/green_oxygen_shape"
                 android:text="SpO2"
+                android:textColor="@color/colorText"
                 android:textSize="24dip" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_column="1"
+                android:layout_weight=".49"
+                android:background="@drawable/green_oxygen_shape"
+                android:textSize="24dp" />
 
         </TableRow>
 
@@ -126,22 +151,27 @@
             android:layout_height="100dip">
 
             <TextView
-                android:layout_width="392dp"
+                android:id="@+id/text_SpO2"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_column="1"
-                android:layout_weight=".33"
+                android:layout_weight=".49"
                 android:background="@drawable/green_oxygen_shape"
-                android:text="@id"
-                android:textSize="24dip" />
+                android:gravity="center|center_horizontal"
+                android:textColor="@color/colorText"
+                android:textSize="48dip" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_column="1"
+                android:layout_weight=".49"
+                android:background="@drawable/green_oxygen_shape"
+                android:textSize="48dip" />
 
         </TableRow>
 
     </TableLayout>
-
-
-
-
-
 
 
     <!--        <TextView
@@ -153,7 +183,6 @@
         android:padding="@dimen/appbar_padding"
         android:text="@string/app_name"
         android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title" />-->
-
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
