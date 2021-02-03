@@ -160,7 +160,7 @@
                 android:gravity="center|center_horizontal"
                 android:textColor="@color/colorText"
                 android:textSize="48dip" />
-
+            
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
