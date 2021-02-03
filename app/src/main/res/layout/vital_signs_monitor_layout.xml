@@ -26,95 +26,111 @@
         android:id="@+id/ECGgraph"
         android:layout_width="match_parent"
         android:layout_height="200dip"
-        android:layout_marginTop="200dip"
+        android:layout_marginTop="100dip"
         android:background="@color/colorBackground" />
+
 
     <com.jjoe64.graphview.GraphView
         android:id="@+id/PPGgraph"
         android:layout_width="match_parent"
         android:layout_height="200dip"
-        android:layout_marginTop="400dip"
+        android:layout_marginTop="450dip"
         android:layout_marginBottom="0dp"
-        android:background="@color/colorBackground" />
-
-
+        android:background="@color/colorBackground"
+        app:layout_anchor="@+id/PPGgraph"
+        app:layout_anchorGravity="bottom|center" />
 
     <TableLayout
         android:layout_width="match_parent"
-        android:layout_height="200dip">
+        android:layout_height="100dip">
 
         <TableRow
             android:layout_width="match_parent"
-            android:layout_height="100dip">
+            android:layout_height="100dip"
+            android:paddingStart="10dip"
+            android:paddingTop="10dip">
 
-                <TextView
-                    android:text="ECG(BMP)"
-                    android:layout_width="0dp"
-                    android:layout_weight=".33"
-                    android:layout_height="wrap_content"
-                    android:layout_column="1"
-                    android:textSize="24dip"/>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_column="1"
+                android:layout_weight=".33"
+                android:text="ECG(BMP)"
+                android:textSize="24dip" />
 
-                <TextView
-                    android:text="SpO2"
-                    android:layout_width="0dp"
-                    android:layout_weight=".33"
-                    android:layout_height="wrap_content"
-                    android:layout_column="2"
-                    android:textSize="24dip"/>
-
-                <TextView
-                    android:text="T °C"
-                    android:layout_width="0dp"
-                    android:layout_weight=".33"
-                    android:layout_height="wrap_content"
-                    android:layout_column="3"
-                    android:textSize="24dip"/>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_column="3"
+                android:layout_weight=".33"
+                android:text="T °C"
+                android:textSize="24dip" />
 
         </TableRow>
 
         <TableRow
             android:layout_width="match_parent"
-            android:layout_height="100dip">
+            android:layout_height="100dip"
+            android:paddingLeft="10dip"
+            android:paddingTop="10dip">
 
             <TextView
-                android:text="@id"
                 android:layout_width="0dp"
-                android:layout_weight=".33"
                 android:layout_height="wrap_content"
                 android:layout_column="1"
-                android:textSize="24dip"/>
-
+                android:layout_weight=".33"
+                android:text="@id"
+                android:textSize="24dip" />
 
             <TextView
-                android:text="@id"
                 android:layout_width="0dp"
-                android:layout_weight=".33"
-                android:layout_height="wrap_content"
-                android:layout_column="2"
-                android:textSize="24dip"/>
-
-            <TextView
-                android:text="@id"
-                android:layout_width="0dp"
-                android:layout_weight=".33"
                 android:layout_height="wrap_content"
                 android:layout_column="3"
-                android:textSize="24dip"/>
+                android:layout_weight=".33"
+                android:text="@id"
+                android:textSize="24dip" />
 
         </TableRow>
 
     </TableLayout>
 
 
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dip"
+        android:layout_marginTop="350dip"
+        android:paddingLeft="10dip"
+        android:paddingTop="10dip">
 
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="100dip">
 
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_column="1"
+                android:layout_weight=".33"
+                android:text="SpO2"
+                android:textSize="24dip" />
 
+        </TableRow>
 
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="100dip">
 
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_column="1"
+                android:layout_weight=".33"
+                android:text="@id"
+                android:textSize="24dip" />
 
+        </TableRow>
 
-
+    </TableLayout>
 
 
 
