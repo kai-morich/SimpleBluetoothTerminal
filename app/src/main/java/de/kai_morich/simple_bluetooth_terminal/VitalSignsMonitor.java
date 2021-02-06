@@ -64,16 +64,17 @@ public class VitalSignsMonitor {
 
     public static void HeartBeat(byte heart_rate) {
         int bpm = (int) heart_rate & 0xFF;
-        VitalSignsMonitorFragment.text_bpm.setText(String.valueOf(bpm));
+        VitalSignsMonitorFragment.text_bpm.setText(String.valueOf(bpm)+" BPM");
     }
 
     public static void Oxygen(byte oxygen) {
         int spO2 = (int) oxygen & 0xFF;
-        VitalSignsMonitorFragment.text_spo2.setText(String.valueOf(spO2));
+        VitalSignsMonitorFragment.text_spo2.setText(String.valueOf(spO2)+"%");
     }
 
     public static void Temperature(byte part_entera, byte part_decimal) {
-        VitalSignsMonitorFragment.text_temp.setText(part_entera & 0xff);
+        double temp = part_entera & 0xff + part_decimal;
+        VitalSignsMonitorFragment.text_temp.setText(String.valueOf(temp) + "°C");
     }
 
     public static void UpdateECGGraph(byte[] copyOfRange) {

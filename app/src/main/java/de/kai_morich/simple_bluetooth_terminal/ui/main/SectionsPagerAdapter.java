@@ -32,7 +32,7 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
     public Fragment getItem(int position){
         switch (position){
             case 0:
-                DevicesFragment devices = new DevicesFragment();        //TODO: crearlos en el constructor y solo devolverlos para que no se creen cada vez que se cambie de tab
+                DevicesFragment devices = new DevicesFragment();
                 return devices;
             case 1:
                 VitalSignsMonitorFragment monitor = new VitalSignsMonitorFragment();
