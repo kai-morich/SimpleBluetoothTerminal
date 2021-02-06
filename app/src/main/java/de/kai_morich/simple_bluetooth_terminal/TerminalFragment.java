@@ -304,7 +304,7 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
                 VitalSignsMonitor.Oxygen(data[2]);
                 break;
             case 'T':
-                //if(data[1] == (byte)0xFF) manejo si hay alarmas
+                //if(data[1] == (byte)0xFF) else{cambio color a normal o algo} manejo si hay alarmas
                 VitalSignsMonitor.Temperature(data[2], data[3]);
                 break;
             case 'E':
