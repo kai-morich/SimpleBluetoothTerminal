@@ -290,54 +290,29 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
     }
 
     private void parsePacket(byte[] packet){
-
-        DataInputStream packet_raw = new DataInputStream(new ByteArrayInputStream(packet));
-        //byte[] backup = Arrays.copyOf(packet, packet.length);
-/*        if (packet.length>0){
-            byte[] data = new byte[12];
-
-            for(int n=0; n < packet.length; n++) {
-                //data[n] = packet[n];        //copio un paquete hasta llegar al terminador
-                if(packet[n] != '\n') {    //si no llegué al final
-                    data[n] = packet[n];        //copio un paquete hasta llegar al terminador
-                }
-                else        //llegúe al final de un paquete
-                {
-                    if (n == packet.length - 1) {     //si era el ultimo paquete
-                        getInfoFromPacket(Arrays.copyOfRange(data, 0, n+1)); //obtengo qué paquete es
-                    }
-                    else{
-                        getInfoFromPacket(Arrays.copyOfRange(data, 0, n)); //obtengo qué paquete es
-                        parsePacket(Arrays.copyOfRange(packet, n, packet.length));
-                    }
-
-
-                }
-            }
-
-        }
-        else
-            return;*/
+        //TODO: acá tengo que fijarme si recibí un paquete entero
+        getInfoFromPacket(packet);
 
     }
 
     private void getInfoFromPacket(byte[] data){
         switch (data[0]) {
             case 'H':
-                curr_H = true;
                 VitalSignsMonitor.HeartBeat(data[1]);
                 break;
             case 'O':
-                curr_O = true;
+                VitalSignsMonitor.Oxygen(data[1]);
                 break;
             case 'T':
-                curr_T = true;
+                VitalSignsMonitor.Temperature(data[1], data[2]);
                 break;
             case 'E':
-                curr_E = true;
+                int lenECG = data[1];
+                VitalSignsMonitor.UpdateECGGraph(Arrays.copyOfRange(data, 1, lenECG));
                 break;
             case 'P':
-                curr_P = true;
+                int lenPPG = data[1];
+                VitalSignsMonitor.UpdatePPGGraph(Arrays.copyOfRange(data, 1, lenPPG));
                 break;
             default:
                 break;
@@ -345,9 +320,9 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
         }
     }
 
-    private boolean newPacket(){
+    /*private boolean newPacket(){
         return curr_H==false && curr_O==false && curr_T==false && curr_E==false  && curr_P==false;
-    }
+    }*/
 
     @Override
     public void onSerialIoError(Exception e) {
