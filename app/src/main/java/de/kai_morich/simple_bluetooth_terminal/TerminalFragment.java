@@ -296,16 +296,16 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
     private void getInfoFromPacket(byte[] data){
         switch (data[0]) {
             case 'H':
-                //if(data[1] == (byte)0x00) manejo si hay alarmas
-
+                //if(data[1] == (byte)0xFF) manejo si hay alarmas
                 VitalSignsMonitor.HeartBeat(data[2]);
                 break;
             case 'O':
-                //if(data[1] == (byte)0x00) manejo si hay alarmas
+                //if(data[1] == (byte)0xFF) manejo si hay alarmas
                 VitalSignsMonitor.Oxygen(data[2]);
                 break;
             case 'T':
-                VitalSignsMonitor.Temperature(data[3], data[4]);
+                //if(data[1] == (byte)0xFF) manejo si hay alarmas
+                VitalSignsMonitor.Temperature(data[2], data[3]);
                 break;
             case 'E':
                 int lenECG = data[2];

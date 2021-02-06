@@ -39,11 +39,11 @@ public class VitalSignsMonitorFragment extends Fragment {
         PPGgraph.addSeries(VitalSignsMonitor.GetPPGPlotData());
 
         text_spo2 = (TextView) view.findViewById(R.id.text_SpO2);
-        text_spo2.setText("220");
+        text_spo2.setText("? %");
         text_temp = (TextView) view.findViewById(R.id.text_temp);
-        text_temp.setText("36.7");
+        text_temp.setText("? °C");
         text_bpm = (TextView) view.findViewById(R.id.text_bpm);
-        //text_bpm.setText("180");
+        text_bpm.setText("? BPM");
     }
 }
 

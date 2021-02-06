@@ -73,7 +73,8 @@ public class VitalSignsMonitor {
     }
 
     public static void Temperature(byte part_entera, byte part_decimal) {
-        double temp = part_entera & 0xff + part_decimal;
+        double temp = (int) part_entera & 0xff;
+        temp +=  part_decimal/10.0;
         VitalSignsMonitorFragment.text_temp.setText(String.valueOf(temp) + "°C");
     }
 
