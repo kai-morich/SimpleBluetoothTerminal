@@ -71,7 +71,7 @@ public class VitalSignsMonitor {
         int spO2 = (int) oxygen & 0xFF;
         VitalSignsMonitorFragment.text_spo2.setText(String.valueOf(spO2)+"%");
     }
-    
+
     public static void Temperature(byte part_entera, byte part_decimal) {
         double temp = part_entera & 0xff + part_decimal;
         VitalSignsMonitorFragment.text_temp.setText(String.valueOf(temp) + "°C");
