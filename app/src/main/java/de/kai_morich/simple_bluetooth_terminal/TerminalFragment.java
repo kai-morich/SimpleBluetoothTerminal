@@ -28,12 +28,28 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import java.io.ByteArrayInputStream;
+import java.io.DataInputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 public class TerminalFragment extends Fragment implements ServiceConnection, SerialListener {
 
     private enum Connected { False, Pending, True }
 
     private String deviceAddress;
     private SerialService service;
+
+    private boolean curr_H = false;
+    private boolean curr_O = false;
+    private boolean curr_T = false;
+    private boolean curr_E = false;
+    private boolean curr_P = false;
+
+
+
 
     private TextView receiveText;
     private TextView sendText;
@@ -242,6 +258,9 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
         }
     }
 
+
+
+
     private void status(String str) {
         SpannableStringBuilder spn = new SpannableStringBuilder(str+'\n');
         spn.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.colorStatusText)), 0, spn.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -265,7 +284,69 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
 
     @Override
     public void onSerialRead(byte[] data) {
+        byte[] packet_raw = Arrays.copyOf(data, data.length);
+        parsePacket(packet_raw);
         receive(data);
+    }
+
+    private void parsePacket(byte[] packet){
+
+        DataInputStream packet_raw = new DataInputStream(new ByteArrayInputStream(packet));
+        //byte[] backup = Arrays.copyOf(packet, packet.length);
+/*        if (packet.length>0){
+            byte[] data = new byte[12];
+
+            for(int n=0; n < packet.length; n++) {
+                //data[n] = packet[n];        //copio un paquete hasta llegar al terminador
+                if(packet[n] != '\n') {    //si no llegué al final
+                    data[n] = packet[n];        //copio un paquete hasta llegar al terminador
+                }
+                else        //llegúe al final de un paquete
+                {
+                    if (n == packet.length - 1) {     //si era el ultimo paquete
+                        getInfoFromPacket(Arrays.copyOfRange(data, 0, n+1)); //obtengo qué paquete es
+                    }
+                    else{
+                        getInfoFromPacket(Arrays.copyOfRange(data, 0, n)); //obtengo qué paquete es
+                        parsePacket(Arrays.copyOfRange(packet, n, packet.length));
+                    }
+
+
+                }
+            }
+
+        }
+        else
+            return;*/
+
+    }
+
+    private void getInfoFromPacket(byte[] data){
+        switch (data[0]) {
+            case 'H':
+                curr_H = true;
+                VitalSignsMonitor.HeartBeat(data[1]);
+                break;
+            case 'O':
+                curr_O = true;
+                break;
+            case 'T':
+                curr_T = true;
+                break;
+            case 'E':
+                curr_E = true;
+                break;
+            case 'P':
+                curr_P = true;
+                break;
+            default:
+                break;
+
+        }
+    }
+
+    private boolean newPacket(){
+        return curr_H==false && curr_O==false && curr_T==false && curr_E==false  && curr_P==false;
     }
 
     @Override

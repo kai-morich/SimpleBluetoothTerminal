@@ -3,7 +3,10 @@ package de.kai_morich.simple_bluetooth_terminal;
 
 //ploteo 5 segundos
 
+import android.widget.TextView;
+
 import com.jjoe64.graphview.GraphView;
+
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
@@ -57,6 +60,10 @@ public class VitalSignsMonitor {
                 new DataPoint(4, 6)
         });
         return PPG_new_samples;
+    }
+
+    public static void HeartBeat(byte heart_rate) {
+        VitalSignsMonitorFragment.text_bpm.setText(heart_rate & 0xff);
     }
 }
 

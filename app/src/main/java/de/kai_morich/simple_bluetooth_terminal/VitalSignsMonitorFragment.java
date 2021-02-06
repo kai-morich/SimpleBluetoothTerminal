@@ -20,6 +20,10 @@ import de.kai_morich.simple_bluetooth_terminal.ui.main.SectionsPagerAdapter;
 
 public class VitalSignsMonitorFragment extends Fragment {
 
+    public static TextView text_spo2;
+    public static TextView text_temp;
+    public static TextView text_bpm;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup, Bundle savedInstanceState){
         return inflater.inflate(R.layout.vital_signs_monitor_layout, viewGroup, false);
@@ -34,12 +38,12 @@ public class VitalSignsMonitorFragment extends Fragment {
         ECGgraph.addSeries(VitalSignsMonitor.GetECGPlotData());
         PPGgraph.addSeries(VitalSignsMonitor.GetPPGPlotData());
 
-        TextView text_spo2 = (TextView) view.findViewById(R.id.text_SpO2);
+        text_spo2 = (TextView) view.findViewById(R.id.text_SpO2);
         text_spo2.setText("220");
-        TextView text_temp = (TextView) view.findViewById(R.id.text_temp);
+        text_temp = (TextView) view.findViewById(R.id.text_temp);
         text_temp.setText("36.7");
-        TextView text_bpm = (TextView) view.findViewById(R.id.text_bpm);
-        text_bpm.setText("180");
+        text_bpm = (TextView) view.findViewById(R.id.text_bpm);
+        //text_bpm.setText("180");
     }
 }
 
