@@ -69,7 +69,7 @@ public class VitalSignsMonitor {
 
             //Roto la lista de samples, remove el ultimo elemento(que es mas viejo ahora) y agrego la muestra actual
             if(ECG_samples.size()>0){
-                Collections.rotate(ECG_samples, 1);
+                //Collections.rotate(ECG_samples, 1);
                 ECG_samples.add(ECG_samples.size()-1, curr_sample);
                 if(ECG_samples.size()==2 && ECG_samples.get(0) == 0)
                     ECG_samples.remove(1);
@@ -80,15 +80,17 @@ public class VitalSignsMonitor {
             //preparo los datapoints para plotear
             DataPoint[] dataPoints = new DataPoint[ECG_samples.size()]; // declare an array of DataPoint objects with the same size as your list
             double step = 1.0/(ECG_FS);
-            double time = -5.0;
+            //double time = -5.0;
             for (int j = 0; j < ECG_samples.size(); j++) {
                 // add new DataPoint object to the array for each of your list entries
+                double sample = ECG_samples.get(j);
+                double time = -5.0+step*j;
                 dataPoints[j] = new DataPoint(time, ECG_samples.get(j)); // not sure but I think the second argument should be of type double
-                time = -5.0 + step*j ;
+                //time = -5.0 + step*j ;
             }
 
             VitalSignsMonitorFragment.ECGDataPoints.resetData(dataPoints);
-            VitalSignsMonitorFragment.ECGDataPoints = new LineGraphSeries<DataPoint>(dataPoints);
+            //VitalSignsMonitorFragment.ECGDataPoints = new LineGraphSeries<DataPoint>(dataPoints);
             VitalSignsMonitorFragment.ECGgraph.addSeries(VitalSignsMonitorFragment.ECGDataPoints);
 
 
