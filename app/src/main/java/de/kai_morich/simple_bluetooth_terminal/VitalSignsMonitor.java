@@ -68,12 +68,12 @@ public class VitalSignsMonitor {
             Double curr_sample = i2 * 256.0 + i1;
 
 
-            //Roto la lista de samples, remove el ultimo elemento(que es mas viejo ahora) y agrego la muestra actual
+            //agrego la muestra actual y saco el ultimo elemento(que es mas viejo ahora)
             if (ECG_samples.size() > 0) {
                 //Collections.rotate(ECG_samples, 1);
-                ECG_samples.add(ECG_samples.size() - 1, curr_sample);
+                ECG_samples.add(ECG_samples.size(), curr_sample);
                 if (ECG_samples.size() == 2 && ECG_samples.get(0) == 0)
-                    ECG_samples.remove(1);
+                    ECG_samples.remove(0);
                 if (ECG_samples.size() > total_points)
                     ECG_samples.remove(0);
             }
@@ -83,7 +83,8 @@ public class VitalSignsMonitor {
             double step = 1.0/(ECG_FS);
             for (int j = 0; j < ECG_samples.size(); j++) {
                 // add new DataPoint object to the array for each of your list entries
-                dataPoints[j] = new DataPoint(-5.0+step*j, ECG_samples.get(j)); // not sure but I think the second argument should be of type double
+                double time = -ECG_samples.size()*step+step*j;
+                dataPoints[j] = new DataPoint(time, ECG_samples.get(j)); // not sure but I think the second argument should be of type double
             }
 
             VitalSignsMonitorFragment.ECGDataPoints.resetData(dataPoints);
@@ -91,12 +92,12 @@ public class VitalSignsMonitor {
 
 
             //todo: pasar a double
-            VitalSignsMonitorFragment.ECGgraph.getViewport().setMinX(-5.1);
-            VitalSignsMonitorFragment.ECGgraph.getViewport().setMaxX(0.5);
+            //VitalSignsMonitorFragment.ECGgraph.getViewport().setMinX(-5.1);
+            //VitalSignsMonitorFragment.ECGgraph.getViewport().setMaxX(0.5);
             VitalSignsMonitorFragment.ECGgraph.getViewport().setMinY(VitalSignsMonitorFragment.ECGDataPoints.getLowestValueY()*1.1);
             VitalSignsMonitorFragment.ECGgraph.getViewport().setMaxY(VitalSignsMonitorFragment.ECGDataPoints.getHighestValueY()*1.1);
             VitalSignsMonitorFragment.ECGgraph.getViewport().setYAxisBoundsManual(true);
-            VitalSignsMonitorFragment.ECGgraph.getViewport().setXAxisBoundsManual(true);
+            //VitalSignsMonitorFragment.ECGgraph.getViewport().setXAxisBoundsManual(true);
 
     }
 

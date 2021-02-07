@@ -102,7 +102,7 @@ class SerialSocket implements Runnable {
             //noinspection InfiniteLoopStatement
             while(true) {
                 int oneByte = socket.getInputStream().read();
-                if(oneByte == '\n'){
+                if(oneByte == '\r'){
                     if(listener != null)
                         listener.onSerialRead(Arrays.copyOfRange(packet, 0,len));
                     len=0;

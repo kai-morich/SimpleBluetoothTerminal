@@ -57,12 +57,14 @@ public class VitalSignsMonitorFragment extends Fragment {
         ECGDataPoints = VitalSignsMonitor.GetECGInitialData();
 
         ECGgraph.addSeries(ECGDataPoints);
-        ECGgraph.getViewport().setMinX(-5.1);
-        ECGgraph.getViewport().setMaxX(0.5);
+        //ECGgraph.getViewport().setMinX(-5.1);
+        ECGgraph.getViewport().setMaxX(1.0);
         ECGgraph.getViewport().setMinY(ECGDataPoints.getLowestValueY()*1.1);
         ECGgraph.getViewport().setMaxY(ECGDataPoints.getHighestValueY()*1.1);
         ECGgraph.getViewport().setYAxisBoundsManual(true);
         ECGgraph.getViewport().setXAxisBoundsManual(true);
+        //ECGgraph.getViewport().setScalable(true);
+        //ECGgraph.getViewport().setScalableY(true);
 
 
         text_spo2 = (TextView) view.findViewById(R.id.text_SpO2);
@@ -78,7 +80,7 @@ public class VitalSignsMonitorFragment extends Fragment {
             ECGgraph = (GraphView) view.findViewById(R.id.ECGgraph);
             GridLabelRenderer ECGgridLabel = ECGgraph.getGridLabelRenderer();
             ECGgridLabel.setHorizontalAxisTitle("Time [s]");
-            //ECGgridLabel.setVerticalAxisTitle("ECG [mV]");    //todo: agregar esto para que quede bien
+            ECGgridLabel.setVerticalAxisTitle("ECG [mV]");    //todo: agregar esto para que quede bien
 
         }
         else if(type == Graph_t.PPG){
