@@ -62,25 +62,25 @@ public class VitalSignsMonitor {
         double total_points = ECG_FS*TIME_TO_PLOT;
         for (int i =0; i<len/2;i++) {
             byte b1 = bytes[i];
-            byte b2 = bytes[i+1];
+            byte b2 = bytes[i + 1];
             int i1 = 0xFF & b1; // Consider b1 as int, not the same as "(int) b1"
             int i2 = 0xFF & b2; // Consider b2 as int, not the same as "(int) b2"
             Double curr_sample = i2 * 256.0 + i1;
 
 
             //Roto la lista de samples, remove el ultimo elemento(que es mas viejo ahora) y agrego la muestra actual
-            if(ECG_samples.size()>0){
+            if (ECG_samples.size() > 0) {
                 //Collections.rotate(ECG_samples, 1);
-                ECG_samples.add(ECG_samples.size()-1, curr_sample);
-                if(ECG_samples.size()==2 && ECG_samples.get(0) == 0)
+                ECG_samples.add(ECG_samples.size() - 1, curr_sample);
+                if (ECG_samples.size() == 2 && ECG_samples.get(0) == 0)
                     ECG_samples.remove(1);
-                if(ECG_samples.size()>total_points)
+                if (ECG_samples.size() > total_points)
                     ECG_samples.remove(0);
             }
-
+        }
             //preparo los datapoints para plotear
             DataPoint[] dataPoints = new DataPoint[ECG_samples.size()]; // declare an array of DataPoint objects with the same size as your list
-            double step = 5.0/(ECG_FS);
+            double step = 1.0/(ECG_FS);
             for (int j = 0; j < ECG_samples.size(); j++) {
                 // add new DataPoint object to the array for each of your list entries
                 dataPoints[j] = new DataPoint(-5.0+step*j, ECG_samples.get(j)); // not sure but I think the second argument should be of type double
@@ -98,11 +98,6 @@ public class VitalSignsMonitor {
             VitalSignsMonitorFragment.ECGgraph.getViewport().setYAxisBoundsManual(true);
             VitalSignsMonitorFragment.ECGgraph.getViewport().setXAxisBoundsManual(true);
 
-
-
-            //VitalSignsMonitorFragment.ECGDataPoints.appendData(new DataPoint(X, n), true, ECG_FS, true);
-            //VitalSignsMonitorFragment.ECGgraph.addSeries(VitalSignsMonitorFragment.ECGDataPoints);
-        }
     }
 
     public static void UpdatePPGGraph(byte[] copyOfRange) {
