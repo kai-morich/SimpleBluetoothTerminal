@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import com.google.android.material.tabs.TabLayout;
 import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.GridLabelRenderer;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -33,7 +34,15 @@ public class VitalSignsMonitorFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         //Bundle args = getArguments();
         GraphView ECGgraph = (GraphView) view.findViewById(R.id.ECGgraph);
+        GridLabelRenderer ECGgridLabel = ECGgraph.getGridLabelRenderer();
+        ECGgridLabel.setHorizontalAxisTitle("Time [s]");
+        ECGgridLabel.setVerticalAxisTitle("ECG [mV]");
+
+
         GraphView PPGgraph = (GraphView) view.findViewById(R.id.PPGgraph);
+        GridLabelRenderer PPGgridLabel = ECGgraph.getGridLabelRenderer();
+        PPGgridLabel.setHorizontalAxisTitle("Time [s]");
+        PPGgridLabel.setVerticalAxisTitle("SpO2 [V]");
 
         ECGgraph.addSeries(VitalSignsMonitor.GetECGPlotData());
         PPGgraph.addSeries(VitalSignsMonitor.GetPPGPlotData());
