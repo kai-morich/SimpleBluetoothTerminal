@@ -18,7 +18,7 @@ public class VitalSignsMonitor {
     //DEFINEs
     private static final int TIME_TO_PLOT = 5; //in seconds
     private static final int ECG_FS = 200; //Hz
-    public static final int PPG_FS = 50; //Hz
+    public static final int PPG_FS = 25; //Hz
 
     private static List<Double> ECG_samples = new ArrayList<Double>() {{
         add(0.0);
@@ -69,10 +69,8 @@ public class VitalSignsMonitor {
     public static void Temperature(byte part_entera, byte part_decimal) {
         double temp = (int) part_entera;
         temp += part_decimal /256.0;
-        if(GetCurrentTemp() != temp) {
-            curr_temp = temp;
-            VitalSignsMonitorFragment.text_temp.setText(String.format("%.2f", temp) + "°C");
-        }
+        VitalSignsMonitorFragment.text_temp.setText(String.format("%.2f", temp) + "°C");
+
     }
 
     public static void UpdateECGGraph(byte[] bytes, int len) {
@@ -134,18 +132,20 @@ public class VitalSignsMonitor {
     }
 
     private static void UpdateDatapoints(byte[] bytes, int len, double total_points, List<Double> samples) {
-        for (int i = 0; i < len; i++) {
-            int p_alta = (int)bytes[i * 2] & 0xff;
-            int p_baja = (int)bytes[i * 2 + 1] & 0xff;
-            double sample = p_alta << 8 | p_baja;
+        if(bytes.length==len*2) {
+            for (int i = 0; i < len; i++) {
+                int p_alta = (int) bytes[i * 2] & 0xff;
+                int p_baja = (int) bytes[i * 2 + 1] & 0xff;
+                double sample = p_alta << 8 | p_baja;
 
-            //agrego la muestra actual y saco el ultimo elemento(que es mas viejo ahora)
-            if (samples.size() > 0) {
-                samples.add(samples.size(), sample);
-                if (samples.size() == 2 && samples.get(0) == 0)
-                    samples.remove(0);
-                if (samples.size() > total_points)
-                    samples.remove(0);
+                //agrego la muestra actual y saco el ultimo elemento(que es mas viejo ahora)
+                if (samples.size() > 0) {
+                    samples.add(samples.size(), sample);
+                    if (samples.size() == 2 && samples.get(0) == 0)
+                        samples.remove(0);
+                    if (samples.size() > total_points)
+                        samples.remove(0);
+                }
             }
         }
     }
