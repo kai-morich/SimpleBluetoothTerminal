@@ -82,7 +82,7 @@ public class VitalSignsMonitor {
 
         //VitalSignsMonitorFragment.ECGgraph.getViewport().setMinX(-5.1);
         //VitalSignsMonitorFragment.ECGgraph.getViewport().setMaxX(0.5);
-        VitalSignsMonitorFragment.ECGgraph.getViewport().setMinY(VitalSignsMonitorFragment.ECGDataPoints.getLowestValueY() * 1.1);
+        VitalSignsMonitorFragment.ECGgraph.getViewport().setMinY(VitalSignsMonitorFragment.ECGDataPoints.getLowestValueY());
         VitalSignsMonitorFragment.ECGgraph.getViewport().setMaxY(VitalSignsMonitorFragment.ECGDataPoints.getHighestValueY() * 1.1);
         VitalSignsMonitorFragment.ECGgraph.getViewport().setYAxisBoundsManual(true);
         //VitalSignsMonitorFragment.ECGgraph.getViewport().setXAxisBoundsManual(true);
@@ -115,9 +115,9 @@ public class VitalSignsMonitor {
     }
 
     private static void UpdateDatapoints(byte[] bytes, int len, double total_points, List<Double> samples) {
-        for (int i = 0; i < len / 2; i++) {
-            byte p_alta = bytes[i * 2];
-            byte p_baja = bytes[i * 2 + 1];
+        for (int i = 0; i < len; i++) {
+            int p_alta = (int)bytes[i * 2] & 0xff;
+            int p_baja = (int)bytes[i * 2 + 1] & 0xff;
             double sample = p_alta << 8 | p_baja;
 
             //agrego la muestra actual y saco el ultimo elemento(que es mas viejo ahora)
