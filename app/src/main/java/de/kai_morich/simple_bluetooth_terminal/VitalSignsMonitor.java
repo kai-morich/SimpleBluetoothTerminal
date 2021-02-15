@@ -27,11 +27,14 @@ public class VitalSignsMonitor {
         add(0.0);
     }};
 
-    private double current_temp;
+    private static double curr_temp=0.0;
+    private static int curr_heart_rate=0;
+    private static int curr_spo2=0;
 
-    //public static Integer GetSpO2(){return SpO2;}
-    //public static Integer[] GetECGAllData() {return ECG_all_samples;}
-    //public static Integer[] getPPGAllData() {return PPG_all_samples;}
+    public static double GetCurrentTemp(){ return curr_temp;}
+    public static int GetCurrentHeartRate(){ return curr_heart_rate;}
+    public static int GetCurrentSpO2(){ return curr_spo2;}
+
 
 
     public static LineGraphSeries<DataPoint> GetECGInitialData() {
@@ -49,18 +52,27 @@ public class VitalSignsMonitor {
 
     public static void HeartBeat(byte heart_rate) {
         int bpm = (int) heart_rate & 0xFF;
-        VitalSignsMonitorFragment.text_bpm.setText(String.valueOf(bpm) + " BPM");
+        if(GetCurrentHeartRate() != bpm) {
+            curr_heart_rate = bpm;
+            VitalSignsMonitorFragment.text_bpm.setText(String.valueOf(bpm) + " BPM");
+        }
     }
 
     public static void Oxygen(byte oxygen) {
         int spO2 = (int) oxygen & 0xFF;
-        VitalSignsMonitorFragment.text_spo2.setText(String.valueOf(spO2) + "%");
+        if(GetCurrentSpO2() != spO2) {
+            curr_spo2 = spO2;
+            VitalSignsMonitorFragment.text_spo2.setText(String.valueOf(spO2) + "%");
+        }
     }
 
     public static void Temperature(byte part_entera, byte part_decimal) {
         double temp = (int) part_entera;
         temp += part_decimal /256.0;
-        VitalSignsMonitorFragment.text_temp.setText(String.format("%.2f", temp) + "°C");
+        if(GetCurrentTemp() != temp) {
+            curr_temp = temp;
+            VitalSignsMonitorFragment.text_temp.setText(String.format("%.2f", temp) + "°C");
+        }
     }
 
     public static void UpdateECGGraph(byte[] bytes, int len) {
