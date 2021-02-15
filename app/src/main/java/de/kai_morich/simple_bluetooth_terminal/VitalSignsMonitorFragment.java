@@ -55,16 +55,23 @@ public class VitalSignsMonitorFragment extends Fragment {
 
 
         ECGDataPoints = VitalSignsMonitor.GetECGInitialData();
-
         ECGgraph.addSeries(ECGDataPoints);
+
+        PPGDataPoints = VitalSignsMonitor.GetPPGInitialData();
+        PPGgraph.addSeries(PPGDataPoints);
+
         //ECGgraph.getViewport().setMinX(-5.1);
         ECGgraph.getViewport().setMaxX(1.0);
         ECGgraph.getViewport().setMinY(ECGDataPoints.getLowestValueY()*1.1);
         ECGgraph.getViewport().setMaxY(ECGDataPoints.getHighestValueY()*1.1);
         ECGgraph.getViewport().setYAxisBoundsManual(true);
         ECGgraph.getViewport().setXAxisBoundsManual(true);
-        //ECGgraph.getViewport().setScalable(true);
-        //ECGgraph.getViewport().setScalableY(true);
+
+        PPGgraph.getViewport().setMaxX(1.0);
+        PPGgraph.getViewport().setMinY(PPGDataPoints.getLowestValueY()*1.1);
+        PPGgraph.getViewport().setMaxY(PPGDataPoints.getHighestValueY()*1.1);
+        PPGgraph.getViewport().setYAxisBoundsManual(true);
+        PPGgraph.getViewport().setXAxisBoundsManual(true);
 
 
         text_spo2 = (TextView) view.findViewById(R.id.text_SpO2);
@@ -80,14 +87,14 @@ public class VitalSignsMonitorFragment extends Fragment {
             ECGgraph = (GraphView) view.findViewById(R.id.ECGgraph);
             GridLabelRenderer ECGgridLabel = ECGgraph.getGridLabelRenderer();
             ECGgridLabel.setHorizontalAxisTitle("Time [s]");
-            ECGgridLabel.setVerticalAxisTitle("ECG [mV]");    //todo: agregar esto para que quede bien
+            ECGgridLabel.setVerticalAxisTitle("ECG [mV]");
 
         }
         else if(type == Graph_t.PPG){
             PPGgraph = (GraphView) view.findViewById(R.id.PPGgraph);
             GridLabelRenderer PPGgridLabel = PPGgraph.getGridLabelRenderer();
             PPGgridLabel.setHorizontalAxisTitle("Time [s]");
-            //PPGgridLabel.setVerticalAxisTitle("SpO2 [?]");    //todo: agregar esto para que quede bien
+            PPGgridLabel.setVerticalAxisTitle("SpO2 [nA]");
         }
 
     }

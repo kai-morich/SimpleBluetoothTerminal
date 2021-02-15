@@ -39,6 +39,7 @@ public class VitalSignsMonitor {
 
     public static LineGraphSeries<DataPoint> GetPPGInitialData() {
         LineGraphSeries<DataPoint> PPG_new_samples = new LineGraphSeries<>(new DataPoint[]{new DataPoint(-5.0, 0.0)});
+        PPG_new_samples.setThickness(5);
         return PPG_new_samples;
     }
 
@@ -101,7 +102,40 @@ public class VitalSignsMonitor {
 
     }
 
-    public static void UpdatePPGGraph(byte[] copyOfRange) {
+    public static void UpdatePPGGraph(byte[] bytes, int len) {
+        double total_points = PPG_FS*TIME_TO_PLOT;
+        for (int i =0; i<len;i++) {
+            byte p_alta = bytes[i*2];
+            byte p_baja = bytes[i*2+1];
+            int ppg = p_alta<<8 | p_baja;
+
+            //agrego la muestra actual y saco el ultimo elemento(que es mas viejo ahora)
+            if (PPG_samples.size() > 0) {
+                PPG_samples.add(PPG_samples.size(), (double) ppg);
+                if (PPG_samples.size() == 2 && PPG_samples.get(0) == 0)
+                    PPG_samples.remove(0);
+                if (PPG_samples.size() > total_points)
+                    PPG_samples.remove(0);
+            }
+        }
+        //preparo los datapoints para plotear
+        DataPoint[] dataPoints = new DataPoint[PPG_samples.size()]; // declare an array of DataPoint objects with the same size as your list
+        double step = 1.0/(PPG_FS);
+        for (int j = 0; j < PPG_samples.size(); j++) {
+            // add new DataPoint object to the array for each of your list entries
+            double time = -PPG_samples.size()*step+step*j;
+            dataPoints[j] = new DataPoint(time, PPG_samples.get(j)); // not sure but I think the second argument should be of type double
+        }
+
+        VitalSignsMonitorFragment.PPGDataPoints.resetData(dataPoints);
+
+
+        //VitalSignsMonitorFragment.ECGgraph.getViewport().setMinX(-5.1);
+        //VitalSignsMonitorFragment.ECGgraph.getViewport().setMaxX(0.5);
+        VitalSignsMonitorFragment.PPGgraph.getViewport().setMinY(VitalSignsMonitorFragment.PPGDataPoints.getLowestValueY()*1.1);
+        VitalSignsMonitorFragment.PPGgraph.getViewport().setMaxY(VitalSignsMonitorFragment.PPGDataPoints.getHighestValueY()*1.1);
+        VitalSignsMonitorFragment.PPGgraph.getViewport().setYAxisBoundsManual(true);
+        //VitalSignsMonitorFragment.ECGgraph.getViewport().setXAxisBoundsManual(true);
     }
 }
 
