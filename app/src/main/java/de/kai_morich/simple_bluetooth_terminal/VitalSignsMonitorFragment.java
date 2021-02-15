@@ -94,7 +94,7 @@ public class VitalSignsMonitorFragment extends Fragment {
             PPGgraph = (GraphView) view.findViewById(R.id.PPGgraph);
             GridLabelRenderer PPGgridLabel = PPGgraph.getGridLabelRenderer();
             PPGgridLabel.setHorizontalAxisTitle("Time [s]");
-            PPGgridLabel.setVerticalAxisTitle("SpO2 [nA]");
+            PPGgridLabel.setVerticalAxisTitle("SpO2 [mA]");
         }
 
     }

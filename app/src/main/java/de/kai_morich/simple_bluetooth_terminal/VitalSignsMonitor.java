@@ -107,7 +107,7 @@ public class VitalSignsMonitor {
         for (int j = 0; j < PPG_samples.size(); j++) {
             // add new DataPoint object to the array for each of your list entries
             double time = -PPG_samples.size() * step + step * j;
-            dataPoints[j] = new DataPoint(time, PPG_samples.get(j)); // not sure but I think the second argument should be of type double
+            dataPoints[j] = new DataPoint(time, PPG_samples.get(j)/1000.0); // not sure but I think the second argument should be of type double
         }
 
         VitalSignsMonitorFragment.PPGDataPoints.resetData(dataPoints);
