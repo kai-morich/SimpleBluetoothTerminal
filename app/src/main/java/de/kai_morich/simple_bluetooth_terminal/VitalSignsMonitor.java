@@ -74,7 +74,7 @@ public class VitalSignsMonitor {
         for (int j = 0; j < ECG_samples.size(); j++) {
             // add new DataPoint object to the array for each of your list entries
             double time = -ECG_samples.size() * step + step * j;
-            dataPoints[j] = new DataPoint(time, ECG_samples.get(j)); // not sure but I think the second argument should be of type double
+            dataPoints[j] = new DataPoint(time, ECG_samples.get(j)/1000.0); // not sure but I think the second argument should be of type double
         }
 
         VitalSignsMonitorFragment.ECGDataPoints.resetData(dataPoints);
@@ -83,7 +83,7 @@ public class VitalSignsMonitor {
         //VitalSignsMonitorFragment.ECGgraph.getViewport().setMinX(-5.1);
         //VitalSignsMonitorFragment.ECGgraph.getViewport().setMaxX(0.5);
         VitalSignsMonitorFragment.ECGgraph.getViewport().setMinY(VitalSignsMonitorFragment.ECGDataPoints.getLowestValueY());
-        VitalSignsMonitorFragment.ECGgraph.getViewport().setMaxY(VitalSignsMonitorFragment.ECGDataPoints.getHighestValueY() * 1.1);
+        VitalSignsMonitorFragment.ECGgraph.getViewport().setMaxY(VitalSignsMonitorFragment.ECGDataPoints.getHighestValueY() * 1.05);
         VitalSignsMonitorFragment.ECGgraph.getViewport().setYAxisBoundsManual(true);
         //VitalSignsMonitorFragment.ECGgraph.getViewport().setXAxisBoundsManual(true);
 

@@ -87,7 +87,7 @@ public class VitalSignsMonitorFragment extends Fragment {
             ECGgraph = (GraphView) view.findViewById(R.id.ECGgraph);
             GridLabelRenderer ECGgridLabel = ECGgraph.getGridLabelRenderer();
             ECGgridLabel.setHorizontalAxisTitle("Time [s]");
-            ECGgridLabel.setVerticalAxisTitle("ECG [mV]");
+            ECGgridLabel.setVerticalAxisTitle("ECG [V]");
 
         }
         else if(type == Graph_t.PPG){
