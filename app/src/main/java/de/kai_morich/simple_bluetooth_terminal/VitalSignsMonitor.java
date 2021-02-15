@@ -94,6 +94,13 @@ public class VitalSignsMonitor {
 
         UpdateDatapoints(bytes, len, total_points, PPG_samples);
 
+        for (int i = 0; i < PPG_samples.size(); i++) {
+            if (PPG_samples.get(i) > 32768) {
+                PPG_samples.set(i, PPG_samples.get(i) - 65536);
+            }
+        }
+
+
         //preparo los datapoints para plotear
         DataPoint[] dataPoints = new DataPoint[PPG_samples.size()]; // declare an array of DataPoint objects with the same size as your list
         double step = 1.0 / (PPG_FS);
@@ -108,7 +115,7 @@ public class VitalSignsMonitor {
 
         //VitalSignsMonitorFragment.ECGgraph.getViewport().setMinX(-5.1);
         //VitalSignsMonitorFragment.ECGgraph.getViewport().setMaxX(0.5);
-        VitalSignsMonitorFragment.PPGgraph.getViewport().setMinY(VitalSignsMonitorFragment.PPGDataPoints.getLowestValueY() * 1.1);
+        VitalSignsMonitorFragment.PPGgraph.getViewport().setMinY(VitalSignsMonitorFragment.PPGDataPoints.getLowestValueY() );
         VitalSignsMonitorFragment.PPGgraph.getViewport().setMaxY(VitalSignsMonitorFragment.PPGDataPoints.getHighestValueY() * 1.1);
         VitalSignsMonitorFragment.PPGgraph.getViewport().setYAxisBoundsManual(true);
         //VitalSignsMonitorFragment.ECGgraph.getViewport().setXAxisBoundsManual(true);
