@@ -17,17 +17,21 @@ import java.util.List;
 public class VitalSignsMonitor {
     //DEFINEs
     private static final int TIME_TO_PLOT = 5; //in seconds
-    private static final int ECG_FS = 50; //Hz
+    private static final int ECG_FS = 200; //Hz
     public static final int PPG_FS = 50; //Hz
 
-    private static List<Double> ECG_samples = new ArrayList<Double>(){{add(0.0);}};
-    private static List<Double> PPG_samples = new ArrayList<Double>(){{add(0.0);}};
+    private static List<Double> ECG_samples = new ArrayList<Double>() {{
+        add(0.0);
+    }};
+    private static List<Double> PPG_samples = new ArrayList<Double>() {{
+        add(0.0);
+    }};
 
-    private static double X = -5.0; //increment counter for plotting
+    private double current_temp;
+
     //public static Integer GetSpO2(){return SpO2;}
     //public static Integer[] GetECGAllData() {return ECG_all_samples;}
     //public static Integer[] getPPGAllData() {return PPG_all_samples;}
-
 
 
     public static LineGraphSeries<DataPoint> GetECGInitialData() {
@@ -45,85 +49,57 @@ public class VitalSignsMonitor {
 
     public static void HeartBeat(byte heart_rate) {
         int bpm = (int) heart_rate & 0xFF;
-        VitalSignsMonitorFragment.text_bpm.setText(String.valueOf(bpm)+" BPM");
+        VitalSignsMonitorFragment.text_bpm.setText(String.valueOf(bpm) + " BPM");
     }
 
     public static void Oxygen(byte oxygen) {
         int spO2 = (int) oxygen & 0xFF;
-        VitalSignsMonitorFragment.text_spo2.setText(String.valueOf(spO2)+"%");
+        VitalSignsMonitorFragment.text_spo2.setText(String.valueOf(spO2) + "%");
     }
 
     public static void Temperature(byte part_entera, byte part_decimal) {
-        double temp = (int) part_entera & 0xff;
-        temp +=  part_decimal/10.0;
-        VitalSignsMonitorFragment.text_temp.setText(String.valueOf(temp) + "°C");
+        double temp = (int) part_entera;
+        temp += part_decimal /256.0;
+        VitalSignsMonitorFragment.text_temp.setText(String.format("%.2f", temp) + "°C");
     }
 
     public static void UpdateECGGraph(byte[] bytes, int len) {
-        double total_points = ECG_FS*TIME_TO_PLOT;
-        for (int i =0; i<len/2;i++) {
-            byte b1 = bytes[i];
-            byte b2 = bytes[i + 1];
-            int i1 = 0xFF & b1; // Consider b1 as int, not the same as "(int) b1"
-            int i2 = 0xFF & b2; // Consider b2 as int, not the same as "(int) b2"
-            Double curr_sample = i2 * 256.0 + i1;
+        double total_points = ECG_FS * TIME_TO_PLOT;
 
+        UpdateDatapoints(bytes, len, total_points, ECG_samples);
 
-            //agrego la muestra actual y saco el ultimo elemento(que es mas viejo ahora)
-            if (ECG_samples.size() > 0) {
-                //Collections.rotate(ECG_samples, 1);
-                ECG_samples.add(ECG_samples.size(), curr_sample);
-                if (ECG_samples.size() == 2 && ECG_samples.get(0) == 0)
-                    ECG_samples.remove(0);
-                if (ECG_samples.size() > total_points)
-                    ECG_samples.remove(0);
-            }
+        //preparo los datapoints para plotear
+        DataPoint[] dataPoints = new DataPoint[ECG_samples.size()]; // declare an array of DataPoint objects with the same size as your list
+        double step = 1.0 / (ECG_FS);
+        for (int j = 0; j < ECG_samples.size(); j++) {
+            // add new DataPoint object to the array for each of your list entries
+            double time = -ECG_samples.size() * step + step * j;
+            dataPoints[j] = new DataPoint(time, ECG_samples.get(j)); // not sure but I think the second argument should be of type double
         }
-            //preparo los datapoints para plotear
-            DataPoint[] dataPoints = new DataPoint[ECG_samples.size()]; // declare an array of DataPoint objects with the same size as your list
-            double step = 1.0/(ECG_FS);
-            for (int j = 0; j < ECG_samples.size(); j++) {
-                // add new DataPoint object to the array for each of your list entries
-                double time = -ECG_samples.size()*step+step*j;
-                dataPoints[j] = new DataPoint(time, ECG_samples.get(j)); // not sure but I think the second argument should be of type double
-            }
 
-            VitalSignsMonitorFragment.ECGDataPoints.resetData(dataPoints);
+        VitalSignsMonitorFragment.ECGDataPoints.resetData(dataPoints);
 
 
-
-            //todo: pasar a double
-            //VitalSignsMonitorFragment.ECGgraph.getViewport().setMinX(-5.1);
-            //VitalSignsMonitorFragment.ECGgraph.getViewport().setMaxX(0.5);
-            VitalSignsMonitorFragment.ECGgraph.getViewport().setMinY(VitalSignsMonitorFragment.ECGDataPoints.getLowestValueY()*1.1);
-            VitalSignsMonitorFragment.ECGgraph.getViewport().setMaxY(VitalSignsMonitorFragment.ECGDataPoints.getHighestValueY()*1.1);
-            VitalSignsMonitorFragment.ECGgraph.getViewport().setYAxisBoundsManual(true);
-            //VitalSignsMonitorFragment.ECGgraph.getViewport().setXAxisBoundsManual(true);
+        //VitalSignsMonitorFragment.ECGgraph.getViewport().setMinX(-5.1);
+        //VitalSignsMonitorFragment.ECGgraph.getViewport().setMaxX(0.5);
+        VitalSignsMonitorFragment.ECGgraph.getViewport().setMinY(VitalSignsMonitorFragment.ECGDataPoints.getLowestValueY() * 1.1);
+        VitalSignsMonitorFragment.ECGgraph.getViewport().setMaxY(VitalSignsMonitorFragment.ECGDataPoints.getHighestValueY() * 1.1);
+        VitalSignsMonitorFragment.ECGgraph.getViewport().setYAxisBoundsManual(true);
+        //VitalSignsMonitorFragment.ECGgraph.getViewport().setXAxisBoundsManual(true);
 
     }
 
     public static void UpdatePPGGraph(byte[] bytes, int len) {
-        double total_points = PPG_FS*TIME_TO_PLOT;
-        for (int i =0; i<len;i++) {
-            byte p_alta = bytes[i*2];
-            byte p_baja = bytes[i*2+1];
-            int ppg = p_alta<<8 | p_baja;
+        double total_points = PPG_FS * TIME_TO_PLOT;
 
-            //agrego la muestra actual y saco el ultimo elemento(que es mas viejo ahora)
-            if (PPG_samples.size() > 0) {
-                PPG_samples.add(PPG_samples.size(), (double) ppg);
-                if (PPG_samples.size() == 2 && PPG_samples.get(0) == 0)
-                    PPG_samples.remove(0);
-                if (PPG_samples.size() > total_points)
-                    PPG_samples.remove(0);
-            }
-        }
+        UpdateDatapoints(bytes, len, total_points, PPG_samples);
+
         //preparo los datapoints para plotear
         DataPoint[] dataPoints = new DataPoint[PPG_samples.size()]; // declare an array of DataPoint objects with the same size as your list
-        double step = 1.0/(PPG_FS);
+        double step = 1.0 / (PPG_FS);
         for (int j = 0; j < PPG_samples.size(); j++) {
             // add new DataPoint object to the array for each of your list entries
-            double time = -PPG_samples.size()*step+step*j;
+            double time = -PPG_samples.size() * step + step * j;
             dataPoints[j] = new DataPoint(time, PPG_samples.get(j)); // not sure but I think the second argument should be of type double
         }
 
@@ -132,10 +108,27 @@ public class VitalSignsMonitor {
 
         //VitalSignsMonitorFragment.ECGgraph.getViewport().setMinX(-5.1);
         //VitalSignsMonitorFragment.ECGgraph.getViewport().setMaxX(0.5);
-        VitalSignsMonitorFragment.PPGgraph.getViewport().setMinY(VitalSignsMonitorFragment.PPGDataPoints.getLowestValueY()*1.1);
-        VitalSignsMonitorFragment.PPGgraph.getViewport().setMaxY(VitalSignsMonitorFragment.PPGDataPoints.getHighestValueY()*1.1);
+        VitalSignsMonitorFragment.PPGgraph.getViewport().setMinY(VitalSignsMonitorFragment.PPGDataPoints.getLowestValueY() * 1.1);
+        VitalSignsMonitorFragment.PPGgraph.getViewport().setMaxY(VitalSignsMonitorFragment.PPGDataPoints.getHighestValueY() * 1.1);
         VitalSignsMonitorFragment.PPGgraph.getViewport().setYAxisBoundsManual(true);
         //VitalSignsMonitorFragment.ECGgraph.getViewport().setXAxisBoundsManual(true);
+    }
+
+    private static void UpdateDatapoints(byte[] bytes, int len, double total_points, List<Double> samples) {
+        for (int i = 0; i < len / 2; i++) {
+            byte p_alta = bytes[i * 2];
+            byte p_baja = bytes[i * 2 + 1];
+            double sample = p_alta << 8 | p_baja;
+
+            //agrego la muestra actual y saco el ultimo elemento(que es mas viejo ahora)
+            if (samples.size() > 0) {
+                samples.add(samples.size(), sample);
+                if (samples.size() == 2 && samples.get(0) == 0)
+                    samples.remove(0);
+                if (samples.size() > total_points)
+                    samples.remove(0);
+            }
+        }
     }
 }
 

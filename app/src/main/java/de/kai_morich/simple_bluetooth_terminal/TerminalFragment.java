@@ -308,8 +308,8 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
                 VitalSignsMonitor.Temperature(data[2], data[3]);
                 break;
             case 'E':
-                int lenECG = data[data.length-1]-2;   //resto byte de checksum y de char
-                VitalSignsMonitor.UpdateECGGraph(Arrays.copyOfRange(data, 1, lenECG+1), lenECG);
+                int lenECG = data[1];   //el n que mando
+                VitalSignsMonitor.UpdateECGGraph(Arrays.copyOfRange(data, 2, data.length-1), lenECG);
                 break;
             case 'P':
                 int lenPPG = data[1];   //el n que mando
