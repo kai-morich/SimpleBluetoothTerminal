@@ -20,9 +20,9 @@ class SerialSocket implements Runnable {
 
     private final BroadcastReceiver disconnectBroadcastReceiver;
 
-    private Context context;
+    private final Context context;
     private SerialListener listener;
-    private BluetoothDevice device;
+    private final BluetoothDevice device;
     private BluetoothSocket socket;
     private boolean connected;
 

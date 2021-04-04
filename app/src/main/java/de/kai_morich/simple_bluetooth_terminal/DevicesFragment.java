@@ -5,6 +5,8 @@ import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.ListFragment;
 import android.view.Menu;
@@ -22,7 +24,7 @@ import java.util.Collections;
 public class DevicesFragment extends ListFragment {
 
     private BluetoothAdapter bluetoothAdapter;
-    private ArrayList<BluetoothDevice> listItems = new ArrayList<>();
+    private final ArrayList<BluetoothDevice> listItems = new ArrayList<>();
     private ArrayAdapter<BluetoothDevice> listAdapter;
 
     @Override
@@ -32,8 +34,9 @@ public class DevicesFragment extends ListFragment {
         if(getActivity().getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH))
             bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         listAdapter = new ArrayAdapter<BluetoothDevice>(getActivity(), 0, listItems) {
+            @NonNull
             @Override
-            public View getView(int position, View view, ViewGroup parent) {
+            public View getView(int position, View view, @NonNull ViewGroup parent) {
                 BluetoothDevice device = listItems.get(position);
                 if (view == null)
                     view = getActivity().getLayoutInflater().inflate(R.layout.device_list_item, parent, false);
@@ -58,7 +61,7 @@ public class DevicesFragment extends ListFragment {
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_devices, menu);
         if(bluetoothAdapter == null)
             menu.findItem(R.id.bt_settings).setEnabled(false);
@@ -101,7 +104,7 @@ public class DevicesFragment extends ListFragment {
     }
 
     @Override
-    public void onListItemClick(ListView l, View v, int position, long id) {
+    public void onListItemClick(@NonNull ListView l, @NonNull View v, int position, long id) {
         BluetoothDevice device = listItems.get(position-1);
         Bundle args = new Bundle();
         args.putString("device", device.getAddress());
