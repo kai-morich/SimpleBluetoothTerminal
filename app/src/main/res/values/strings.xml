@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">Simple Bluetooth Terminal</string>
     <string name="devices">Bluetooth Devices</string>
+
+    <string name="bluetooth_permission_title">Bluetooth permission</string>
+    <string name="bluetooth_permission_grant">Bluetooth permission is required by this App. Please grant in next dialog.</string>
+    <string name="bluetooth_permission_denied">Bluetooth permission was permanently denied. You have to enable permission \"%s\" in App settings.</string>
 </resources>
