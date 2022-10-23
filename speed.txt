@@ -1,0 +1,24 @@
+SPEED: Schraeges Protokoll zur Erfassung von Eigenbewegungs-Daten
+
+> -- Start-Marker
+aabbcc -- letzte drei Bytes MAC-Adresse (NIC-spezifisch) als ASCII (https://techtutorialsx.com/2018/03/09/esp32-arduino-getting-the-bluetooth-device-address/)
+: -- Trenner
+d -- Sensor 
+    ("V" velocity)
+    ("E" environmental data)
+    ("S" system status)
+e -- Datensatz
+    fuer "V":
+    ("F" frequency /Hz)
+    fuer "E":
+    ("P" air pressure /mbar)
+    ("T" temperature /°C)
+    ("H" humidity /%rH)
+    fuer "S":
+    ("V" supply voltage /V)
+    ("U" uptime /s)
+# -- Trenner
+nnn -- fortlaufende Nummer innerhalb dieses Datensatzes (000-999, danach wieder 000)
+= -- Trenner
+f.f -- Messwert als float oder double
+< -- Ende-Marker

@@ -4,10 +4,10 @@ android {
     compileSdkVersion 29
     defaultConfig {
         targetSdkVersion 29
-        minSdkVersion 18
+        minSdk 29
         vectorDrawables.useSupportLibrary true
 
-        applicationId "de.kai_morich.simple_bluetooth_terminal"
+        applicationId "plus.hahn.speedometer"
         versionCode 1
         versionName "1.0"
     }

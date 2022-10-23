@@ -16,6 +16,16 @@
         android:scrollbars="vertical"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
+    <TextView
+        android:id="@+id/speedometer_text"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_weight="1"
+        android:freezesText="true"
+        android:gravity="bottom"
+        android:scrollbars="vertical"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
     <View
         android:layout_width="match_parent"
         android:background="?android:attr/listDivider"
