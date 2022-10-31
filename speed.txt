@@ -17,8 +17,9 @@ e -- Datensatz
     fuer "S":
     ("V" supply voltage /V)
     ("U" uptime /s)
+    ("B" build version /String, maximal 25 Zeichen)
 # -- Trenner
 nnn -- fortlaufende Nummer innerhalb dieses Datensatzes (000-999, danach wieder 000)
 = -- Trenner
-f.f -- Messwert als float oder double
+f.f -- Messwert als float oder double (es sei denn, beim Datensatz ist ein anderes Format angegeben)
 < -- Ende-Marker
