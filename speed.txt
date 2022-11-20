@@ -10,6 +10,7 @@ d -- Sensor
 e -- Datensatz
     fuer "V":
     ("F" frequency /Hz)
+    ("A" maximum amplitude /raw sample)
     fuer "E":
     ("P" air pressure /mbar)
     ("T" temperature /°C)
