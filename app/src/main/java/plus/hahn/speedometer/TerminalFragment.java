@@ -6,7 +6,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.ComponentName;
@@ -15,7 +14,6 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.text.Editable;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.method.ScrollingMovementMethod;
@@ -27,11 +25,23 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+
+class parsedDouble {
+
+    public boolean valid;   // holds true, if value can be used
+    public double value;    // double representation of input string
+    public String raw;      // copy of input string
+
+    parsedDouble() {
+        valid = false;
+        value = 0.0;
+        raw = "";
+    }
+}
 
 public class TerminalFragment extends Fragment implements ServiceConnection, SerialListener {
 
@@ -41,15 +51,10 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
     private SerialService service;
 
     private TextView receiveText;
-    private TextView sendText;
     private TextView speedometerText;
-    private TextUtil.HexWatcher hexWatcher;
 
     private Connected connected = Connected.False;
     private boolean initialStart = true;
-    private boolean hexEnabled = false;
-    private boolean pendingNewline = false;
-    private String newline = TextUtil.newline_crlf;
     private String speedometerLine = "";
     private double currentSpeed = 0.0;    // m/s
     private double accumulatedDistance = 0.0;   // m
@@ -57,11 +62,8 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
     private java.time.Instant lastTimestamp = java.time.Instant.MIN;
     private double timeElapsed;
     private Pattern sentencePattern = Pattern.compile (">[0-9a-fA-F]{6}:[VES][A-Z]#[0-9]{3}=.*<");
-//    private Pattern sentencePattern = Pattern.compile (">[0-9a-fA-F]{6}:[VES][A-Z]#[0-9]{3}=[0-9]+(\\\\.[0-9]+)?<");
 
-    /*
-     * Lifecycle
-     */
+    // === Lifecycle ==========================================================
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -131,9 +133,7 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
         service = null;
     }
 
-    /*
-     * UI
-     */
+    // === UI =================================================================
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_terminal, container, false);
@@ -145,21 +145,12 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
         speedometerText.setTextColor(getResources().getColor(R.color.colorRecieveText)); // set as default color to reduce number of spans
         speedometerText.setMovementMethod(ScrollingMovementMethod.getInstance());
 
-        sendText = view.findViewById(R.id.send_text);
-        hexWatcher = new TextUtil.HexWatcher(sendText);
-        hexWatcher.enable(hexEnabled);
-        sendText.addTextChangedListener(hexWatcher);
-        sendText.setHint(hexEnabled ? "HEX mode" : "");
-
-        View sendBtn = view.findViewById(R.id.send_btn);
-        sendBtn.setOnClickListener(v -> send(sendText.getText().toString()));
         return view;
     }
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_terminal, menu);
-        menu.findItem(R.id.hex).setChecked(hexEnabled);
     }
 
     @Override
@@ -169,33 +160,12 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
             receiveText.setText("");
             speedometerText.setText("");
             return true;
-        } else if (id == R.id.newline) {
-            String[] newlineNames = getResources().getStringArray(R.array.newline_names);
-            String[] newlineValues = getResources().getStringArray(R.array.newline_values);
-            int pos = java.util.Arrays.asList(newlineValues).indexOf(newline);
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            builder.setTitle("Newline");
-            builder.setSingleChoiceItems(newlineNames, pos, (dialog, item1) -> {
-                newline = newlineValues[item1];
-                dialog.dismiss();
-            });
-            builder.create().show();
-            return true;
-        } else if (id == R.id.hex) {
-            hexEnabled = !hexEnabled;
-            sendText.setText("");
-            hexWatcher.enable(hexEnabled);
-            sendText.setHint(hexEnabled ? "HEX mode" : "");
-            item.setChecked(hexEnabled);
-            return true;
         } else {
             return super.onOptionsItemSelected(item);
         }
     }
 
-    /*
-     * Serial + UI
-     */
+    // === Serial + UI ========================================================
     private void connect() {
         try {
             BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -214,81 +184,70 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
         service.disconnect();
     }
 
-    private void send(String str) {
-        if(connected != Connected.True) {
-            Toast.makeText(getActivity(), "not connected", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        try {
-            String msg;
-            byte[] data;
-            if(hexEnabled) {
-                StringBuilder sb = new StringBuilder();
-                TextUtil.toHexString(sb, TextUtil.fromHexString(str));
-                TextUtil.toHexString(sb, newline.getBytes());
-                msg = sb.toString();
-                data = TextUtil.fromHexString(msg);
-            } else {
-                msg = str;
-                data = (str + newline).getBytes();
-            }
-            SpannableStringBuilder spn = new SpannableStringBuilder(msg + '\n');
-            spn.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.colorSendText)), 0, spn.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            receiveText.append(spn);
-            service.write(data);
-        } catch (Exception e) {
-            onSerialIoError(e);
-        }
-    }
-
     private void receive(byte[] data) {
-        if(hexEnabled) {
-            receiveText.append(TextUtil.toHexString(data) + '\n');
-        } else {
-            String msg = new String(data);
-            if(newline.equals(TextUtil.newline_crlf) && msg.length() > 0) {
-                // don't show CR as ^M if directly before LF
-                msg = msg.replace(TextUtil.newline_crlf, TextUtil.newline_lf);
-                // special handling if CR and LF come in separate fragments
-                if (pendingNewline && msg.charAt(0) == '\n') {
-                    Editable edt = receiveText.getEditableText();
-                    if (edt != null && edt.length() > 1)
-                        edt.replace(edt.length() - 2, edt.length(), "");
-                }
-                pendingNewline = msg.charAt(msg.length() - 1) == '\r';
-            }
-            receiveText.append(TextUtil.toCaretString(msg, newline.length() != 0));
-            speedometerLine += new String(data);
-            Matcher sentenceMatcher = sentencePattern.matcher (speedometerLine);
+        String msg = new String(data);
+        receiveText.append(msg);
+        speedometerLine += new String(data);
+        Matcher sentenceMatcher = sentencePattern.matcher (speedometerLine);
 
-            if (sentenceMatcher.find()) {
-                String macAddress = speedometerLine.substring(1,7);
-                char sensor = speedometerLine.charAt(8);
-                char dataset = speedometerLine.charAt(9);
-                int counter = Integer.parseInt(speedometerLine.substring(11,14));
-                double measurement = Double.parseDouble(speedometerLine.substring(15, speedometerLine.length()-2));
-                switch (sensor) {
-                    case 'V':
-                        switch (dataset) {
-                            case 'F':
-                                handleFrequency (measurement);
-                                break;
-                            default:
-                                // some kind of error handling?!
-                                break;
-                        }
-                        break;
-                    case 'E':
-                        break;
-                    case 'S':
-                        break;
-                    default:
-                        // some kind of error handling?!
-                        break;
-                }
+        if (sentenceMatcher.find()) {
+            String macAddress = speedometerLine.substring(1,7);
+            char sensor = speedometerLine.charAt(8);
+            char dataset = speedometerLine.charAt(9);
+            int counter = Integer.parseInt(speedometerLine.substring(11,14));
+            parsedDouble parsed = getDouble(speedometerLine.substring(15, speedometerLine.indexOf("<")));
+            speedometerLine = speedometerLine.substring(speedometerLine.indexOf("<") + 2);
+
+            switch (sensor) {
+                case 'V':
+                    switch (dataset) {
+                        case 'F':   // frequency
+                            if (parsed.valid) {
+                                handleFrequency (parsed.value);
+                            }
+                            break;
+                        case 'A':   // amplitude
+                            if (parsed.valid) {
+                                handleAmplitude (parsed.value);
+                            }
+                            break;
+                        default:
+                            // some kind of error handling?!
+                            break;
+                    }
+                    break;
+                case 'E':
+                    switch (dataset) {
+                        case 'P':   // pressure
+                        case 'T':   // temperature
+                        case 'H':   // humidity
+                        default:
+                            // some kind of error handling?!
+                            break;
+                    }
+                    break;
+                case 'S':
+                    switch (dataset) {
+                        case 'V':   // supply voltage
+                        case 'U':   // uptime
+                            if (parsed.valid) {
+                                handleUptime (parsed.value);
+                            }
+                            break;
+                        case 'B':   // build version
+                            if (!parsed.valid) {
+                                handleBuildVersion (parsed.raw);
+                            }
+                            break;
+                        default:
+                            // some kind of error handling?!
+                            break;
+                    }
+                    break;
+                default:
+                    // some kind of error handling?!
+                    break;
             }
-            speedometerLine = "";
-            speedometerText.append("v=" + String.format("%05.2f", currentSpeed) + " d=" + String.format("%07.2f", accumulatedDistance) + " t=" + String.format("%07.2f", timeWithMovement) + "\n");
         }
     }
 
@@ -298,9 +257,7 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
         receiveText.append(spn);
     }
 
-    /*
-     * SerialListener
-     */
+    // === SerialListener =====================================================
     @Override
     public void onSerialConnect() {
         status("connected");
@@ -311,6 +268,8 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
     public void onSerialConnectError(Exception e) {
         status("connection failed: " + e.getMessage());
         disconnect();
+        onStop();
+        onDetach();
     }
 
     @Override
@@ -324,6 +283,20 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
         disconnect();
     }
 
+    private parsedDouble getDouble (String value)
+    {
+        parsedDouble result = new parsedDouble();
+        result.raw = value;
+        try {
+            result.value = Double.parseDouble(value);
+            result.valid = true;
+        } catch(Exception e) {
+            result.valid = false;
+        }
+        return result;
+    }
+
+
     private void handleFrequency(double frequency) {
         Instant now = java.time.Instant.now();
         if (lastTimestamp != java.time.Instant.MIN) {
@@ -334,5 +307,21 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
             timeWithMovement += timeElapsed;
         }
         lastTimestamp = now;
+        speedometerText.append("v=" + String.format("%05.2f", currentSpeed) + " d=" + String.format("%07.2f", accumulatedDistance) + " t=" + String.format("%07.2f", timeWithMovement) + "\n");
+    }
+
+
+    private void handleAmplitude(double amplitude) {
+        speedometerText.append("a=" + String.format("%05.2f", amplitude) + "\n");
+    }
+
+
+    private void handleUptime(double uptime) {
+        speedometerText.append("t=" + String.format("%05.2f", uptime) + "\n");
+    }
+
+
+    private void handleBuildVersion(String buildVersion) {
+        speedometerText.append("build: " + buildVersion + "\n");
     }
 }

@@ -6,13 +6,4 @@
         android:icon="@drawable/ic_delete_white_24dp"
         android:title="Clear"
         app:showAsAction="always" />
-    <item
-        android:id="@+id/newline"
-        android:title="Newline"
-        app:showAsAction="never" />
-    <item
-        android:id="@+id/hex"
-        android:title="HEX Mode"
-        android:checkable="true"
-        app:showAsAction="never" />
 </menu>
