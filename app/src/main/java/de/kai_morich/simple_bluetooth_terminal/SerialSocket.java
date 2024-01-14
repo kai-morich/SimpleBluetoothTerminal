@@ -8,6 +8,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 
+import androidx.core.content.ContextCompat;
+
 import java.io.IOException;
 import java.security.InvalidParameterException;
 import java.util.Arrays;
@@ -50,7 +52,7 @@ class SerialSocket implements Runnable {
      */
     void connect(SerialListener listener) throws IOException {
         this.listener = listener;
-        context.registerReceiver(disconnectBroadcastReceiver, new IntentFilter(Constants.INTENT_ACTION_DISCONNECT));
+        ContextCompat.registerReceiver(context, disconnectBroadcastReceiver, new IntentFilter(Constants.INTENT_ACTION_DISCONNECT), ContextCompat.RECEIVER_NOT_EXPORTED);
         Executors.newSingleThreadExecutor().submit(this);
     }
 

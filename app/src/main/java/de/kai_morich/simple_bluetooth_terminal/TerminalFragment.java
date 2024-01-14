@@ -1,5 +1,6 @@
 package de.kai_morich.simple_bluetooth_terminal;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
@@ -8,6 +9,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.text.Editable;
@@ -29,6 +31,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import java.util.ArrayDeque;
+import java.util.Arrays;
 
 public class TerminalFragment extends Fragment implements ServiceConnection, SerialListener {
 
@@ -143,7 +146,16 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_terminal, menu);
+    }
+
+    public void onPrepareOptionsMenu(@NonNull Menu menu) {
         menu.findItem(R.id.hex).setChecked(hexEnabled);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            menu.findItem(R.id.backgroundNotification).setChecked(service != null && service.areNotificationsEnabled());
+        } else {
+            menu.findItem(R.id.backgroundNotification).setChecked(true);
+            menu.findItem(R.id.backgroundNotification).setEnabled(false);
+        }
     }
 
     @Override
@@ -170,6 +182,15 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
             hexWatcher.enable(hexEnabled);
             sendText.setHint(hexEnabled ? "HEX mode" : "");
             item.setChecked(hexEnabled);
+            return true;
+        } else if (id == R.id.backgroundNotification) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                if (!service.areNotificationsEnabled() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    requestPermissions(new String[]{Manifest.permission.POST_NOTIFICATIONS}, 0);
+                } else {
+                    showNotificationSettings();
+                }
+            }
             return true;
         } else {
             return super.onOptionsItemSelected(item);
@@ -256,6 +277,24 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
         SpannableStringBuilder spn = new SpannableStringBuilder(str + '\n');
         spn.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.colorStatusText)), 0, spn.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         receiveText.append(spn);
+    }
+
+    /*
+     * starting with Android 14, notifications are not shown in notification bar by default when App is in background
+     */
+
+    private void showNotificationSettings() {
+        Intent intent = new Intent();
+        intent.setAction("android.settings.APP_NOTIFICATION_SETTINGS");
+        intent.putExtra("android.provider.extra.APP_PACKAGE", getActivity().getPackageName());
+        startActivity(intent);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if(Arrays.equals(permissions, new String[]{Manifest.permission.POST_NOTIFICATIONS}) &&
+                Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && !service.areNotificationsEnabled())
+            showNotificationSettings();
     }
 
     /*
